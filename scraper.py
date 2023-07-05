@@ -18,6 +18,8 @@ for x in ds.systems:
 
 print(clients)
 
+ignore_list = ["bcycle_lametro"]
+
 print("- Init...")
 bikes = {client:{} for client in clients}
 
@@ -32,7 +34,7 @@ while(True):
         print(f"- Saving... {sum(len(bikes[c][f]) for c in bikes for f in bikes[c])}")
         bikes = {client:{} for client in clients}
     
-    for client in clients:
+    for client in clients if client not in ignore_list:
         try:
             result = clients[client].request_feed('free_bike_status')   
             timestamp = result["last_updated"]
