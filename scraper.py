@@ -27,7 +27,7 @@ print("- Collecting data...")
 i = 1
 while(True):
     if i % 120 == 0:
-        # save data every 2h:
+        # save data periodically:
         timestamp = str(f"{datetime.datetime.now():%Y-%m-%d_%H}")
         with open(f'data/bikes_{timestamp}.pickle', 'wb') as f:
             pickle.dump(bikes, f)
@@ -36,7 +36,7 @@ while(True):
     
     for client in clients:
         if client not in ignore_list:
-            time.sleep(10)
+            time.sleep(60)
             try:
                 result = clients[client].request_feed('free_bike_status')   
                 timestamp = result["last_updated"]
