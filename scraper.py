@@ -10,7 +10,7 @@ import datetime
 print("GBFS Scraper")
 ds = SystemDiscoveryService()
 
-print("- Check clients...")
+print("- Checking clients...")
 clients = {}
 for x in ds.systems:
     if 'Seattle' in x.get('Location') or 'Los Angeles' in x.get('Location'):
@@ -21,7 +21,7 @@ print(clients)
 print("- Init...")
 bikes = {client:{} for client in clients}
 
-print("- Collect data...")
+print("- Collecting data...")
 i = 1
 while(True):
     if i % 120 == 0:
