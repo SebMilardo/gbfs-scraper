@@ -35,7 +35,7 @@ while(True):
         bikes = {client:{} for client in clients}
     
     for client in clients:
-        if client not in ignore_list
+        if client not in ignore_list:
             try:
                 result = clients[client].request_feed('free_bike_status')   
                 timestamp = result["last_updated"]
