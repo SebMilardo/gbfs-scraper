@@ -1,0 +1,5 @@
+pandas
+numpy
+tqdm
+gbfs-client==0.1.8
+geopy
