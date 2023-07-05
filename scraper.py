@@ -34,36 +34,37 @@ while(True):
         print(f"- Saving... {sum(len(bikes[c][f]) for c in bikes for f in bikes[c])}")
         bikes = {client:{} for client in clients}
     
-    for client in clients if client not in ignore_list:
-        try:
-            result = clients[client].request_feed('free_bike_status')   
-            timestamp = result["last_updated"]
-            
-            for bike in result["data"]["bikes"]:
-                bike_id = bike["bike_id"]
-                tmp = bikes[client].get(bike_id, [])
-                if len(tmp) > 0:
-                    last = tmp[-1]
-                    if great_circle((bike["lat"],bike["lon"]), 
-                                    (last[1], last[2])).meters > 100 or \
-                        last[3] != bike["is_reserved"] or \
-                        last[4] != bike["is_disabled"] :
-                        
+    for client in clients:
+        if client not in ignore_list
+            try:
+                result = clients[client].request_feed('free_bike_status')   
+                timestamp = result["last_updated"]
+                
+                for bike in result["data"]["bikes"]:
+                    bike_id = bike["bike_id"]
+                    tmp = bikes[client].get(bike_id, [])
+                    if len(tmp) > 0:
+                        last = tmp[-1]
+                        if great_circle((bike["lat"],bike["lon"]), 
+                                        (last[1], last[2])).meters > 100 or \
+                            last[3] != bike["is_reserved"] or \
+                            last[4] != bike["is_disabled"] :
+                            
+                            tmp.append((timestamp, 
+                                        np.round(bike["lat"],5), 
+                                        np.round(bike["lon"],5), 
+                                        bike['is_reserved'], bike['is_disabled'],))
+                            bikes[client][bike_id] = tmp
+                    else:
                         tmp.append((timestamp, 
-                                    np.round(bike["lat"],5), 
-                                    np.round(bike["lon"],5), 
+                                    np.round(bike["lat"]), 
+                                    np.round(bike["lon"]), 
                                     bike['is_reserved'], bike['is_disabled'],))
                         bikes[client][bike_id] = tmp
-                else:
-                    tmp.append((timestamp, 
-                                np.round(bike["lat"]), 
-                                np.round(bike["lon"]), 
-                                bike['is_reserved'], bike['is_disabled'],))
-                    bikes[client][bike_id] = tmp
-        except Exception as e:
-            print(client)
-            print(str(e))
-            pass
+            except Exception as e:
+                print(client)
+                print(str(e))
+                pass
     time.sleep(60)
     i += 1
     
