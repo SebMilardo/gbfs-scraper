@@ -7,18 +7,21 @@ from tqdm import tqdm
 import pickle
 import datetime
 
+print("GBFS Scraper")
 ds = SystemDiscoveryService()
 
+print("- Check clients...")
 clients = {}
-
 for x in ds.systems:
     if 'Seattle' in x.get('Location') or 'Los Angeles' in x.get('Location'):
         clients[x["System ID"]] = ds.instantiate_client(x["System ID"])
 
 print(clients)
 
+print("- Init...")
 bikes = {client:{} for client in clients}
 
+print("- Collect data...")
 i = 1
 while(True):
     if i % 120 == 0:
@@ -26,7 +29,7 @@ while(True):
         timestamp = str(f"{datetime.datetime.now():%Y-%m-%d_%H}")
         with open(f'data/bikes_{timestamp}.pickle', 'wb') as f:
             pickle.dump(bikes, f)
-        print(sum(len(bikes[c][f]) for c in bikes for f in bikes[c]))
+        print(f"- Saving... {sum(len(bikes[c][f]) for c in bikes for f in bikes[c])}")
         bikes = {client:{} for client in clients}
     
     for client in clients:
@@ -63,6 +66,6 @@ while(True):
     
 # last save:
 timestamp = str(f"{datetime.datetime.now():%Y-%m-%d_%H}")
-print(sum(len(bikes[c][f]) for c in bikes for f in bikes[c]))
+print(f"- Saving... {sum(len(bikes[c][f]) for c in bikes for f in bikes[c])}")
 with open(f'data/bikes_{timestamp}.pickle', 'wb') as f:
     pickle.dump(bikes, f)
