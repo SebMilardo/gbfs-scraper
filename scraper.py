@@ -59,6 +59,7 @@ while(True):
                                 bike['is_reserved'], bike['is_disabled'],))
                     bikes[client][bike_id] = tmp
         except Exception as e:
+            print(client)
             print(str(e))
             pass
     time.sleep(60)
