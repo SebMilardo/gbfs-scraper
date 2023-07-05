@@ -36,6 +36,7 @@ while(True):
     
     for client in clients:
         if client not in ignore_list:
+            time.sleep(10)
             try:
                 result = clients[client].request_feed('free_bike_status')   
                 timestamp = result["last_updated"]
